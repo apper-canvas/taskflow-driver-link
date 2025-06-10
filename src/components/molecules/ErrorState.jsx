@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import ApperIcon from './ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
+import Button from '@/components/atoms/Button';
 
 const ErrorState = ({ message = "Something went wrong", onRetry = null }) => {
   return (
@@ -17,15 +18,14 @@ const ErrorState = ({ message = "Something went wrong", onRetry = null }) => {
       <p className="text-gray-500 mb-6 max-w-sm mx-auto">{message}</p>
       
       {onRetry && (
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+        <Button
           onClick={onRetry}
           className="inline-flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-light transition-colors duration-200"
+          motionProps={{ whileHover: { scale: 1.05 }, whileTap: { scale: 0.95 } }}
         >
           <ApperIcon name="RotateCcw" className="w-4 h-4" />
           <span>Try Again</span>
-        </motion.button>
+        </Button>
       )}
     </motion.div>
   );

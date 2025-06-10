@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { format, isToday, isPast, isFuture } from 'date-fns';
-import ApperIcon from './ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
+import Button from '@/components/atoms/Button';
 
-const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, onArchive }) => {
+const TaskCard = ({ task, onToggleComplete, onEdit, onDelete, onArchive }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const getPriorityColor = (priority) => {
@@ -46,11 +47,10 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, onArchive }) => {
     >
       <div className="flex items-start space-x-4">
         {/* Checkbox */}
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+        <Button
           onClick={() => onToggleComplete(task.id)}
           className="relative flex-shrink-0 mt-1"
+          motionProps={{ whileHover: { scale: 1.1 }, whileTap: { scale: 0.9 } }}
         >
           <div className={`w-5 h-5 rounded border-2 transition-all duration-200 ${
             task.completed 
@@ -61,14 +61,14 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, onArchive }) => {
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", damping: 20, stiffness: 300 }}
+                transition={{ type: 'spring', damping: 20, stiffness: 300 }}
                 className="absolute inset-0 flex items-center justify-center"
               >
                 <ApperIcon name="Check" className="w-3 h-3 text-white" />
               </motion.div>
             )}
           </div>
-        </motion.button>
+        </Button>
 
         {/* Task Content */}
         <div className="flex-1 min-w-0">
@@ -115,35 +115,32 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, onArchive }) => {
                 isHovered ? 'opacity-100' : 'opacity-0'
               }`}
             >
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+              <Button
                 onClick={() => onEdit(task)}
                 className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
                 title="Edit task"
+                motionProps={{ whileHover: { scale: 1.1 }, whileTap: { scale: 0.9 } }}
               >
                 <ApperIcon name="Edit2" className="w-4 h-4" />
-              </motion.button>
+              </Button>
 
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+              <Button
                 onClick={() => onArchive(task.id)}
                 className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
                 title="Archive task"
+                motionProps={{ whileHover: { scale: 1.1 }, whileTap: { scale: 0.9 } }}
               >
                 <ApperIcon name="Archive" className="w-4 h-4" />
-              </motion.button>
+              </Button>
 
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+              <Button
                 onClick={() => onDelete(task.id)}
                 className="p-1 rounded hover:bg-red-50 text-gray-400 hover:text-red-600"
                 title="Delete task"
+                motionProps={{ whileHover: { scale: 1.1 }, whileTap: { scale: 0.9 } }}
               >
                 <ApperIcon name="Trash2" className="w-4 h-4" />
-              </motion.button>
+              </Button>
             </motion.div>
           </div>
         </div>
@@ -152,4 +149,4 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, onArchive }) => {
   );
 };
 
-export default TaskItem;
+export default TaskCard;

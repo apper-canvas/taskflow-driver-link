@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import ApperIcon from './ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
+import Button from '@/components/atoms/Button';
 
 const EmptyState = ({ 
   title = "No items found", 
@@ -28,15 +29,14 @@ const EmptyState = ({
       <p className="text-gray-500 mb-6 max-w-sm mx-auto">{description}</p>
       
       {actionLabel && onAction && (
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+        <Button
           onClick={onAction}
           className="inline-flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-light transition-colors duration-200"
+          motionProps={{ whileHover: { scale: 1.05 }, whileTap: { scale: 0.95 } }}
         >
           <ApperIcon name="Plus" className="w-4 h-4" />
           <span>{actionLabel}</span>
-        </motion.button>
+        </Button>
       )}
     </motion.div>
   );

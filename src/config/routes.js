@@ -1,48 +1,48 @@
-import Home from '../pages/Home';
-import Today from '../pages/Today';
-import Upcoming from '../pages/Upcoming';
-import Archive from '../pages/Archive';
-import Settings from '../pages/Settings';
-import Personal from '../pages/Personal';
-import Work from '../pages/Work';
-import Shopping from '../pages/Shopping';
+import HomePage from '@/components/pages/HomePage';
+import TodayPage from '@/components/pages/TodayPage';
+import UpcomingPage from '@/components/pages/UpcomingPage';
+import ArchivePage from '@/components/pages/ArchivePage';
+import SettingsPage from '@/components/pages/SettingsPage';
+import PersonalPage from '@/components/pages/PersonalPage';
+import WorkPage from '@/components/pages/WorkPage';
+import ShoppingPage from '@/components/pages/ShoppingPage';
 
 export const routes = {
-  home: {
+home: {
     id: 'home',
     label: 'All Tasks',
     path: '/home',
     icon: 'CheckSquare',
-    component: Home
+    component: HomePage
   },
   today: {
     id: 'today',
     label: 'Today',
     path: '/today',
     icon: 'Calendar',
-    component: Today
+    component: TodayPage
   },
-  upcoming: {
+upcoming: {
     id: 'upcoming',
     label: 'Upcoming',
     path: '/upcoming',
     icon: 'Clock',
-    component: Upcoming
+    component: UpcomingPage
   },
   personal: {
     id: 'personal',
     label: 'Personal',
     path: '/personal',
     icon: 'User',
-    component: Personal,
+    component: PersonalPage,
     isCustomList: true
   },
-  work: {
+work: {
     id: 'work',
     label: 'Work',
     path: '/work',
     icon: 'Briefcase',
-    component: Work,
+    component: WorkPage,
     isCustomList: true
   },
   shopping: {
@@ -50,22 +50,22 @@ export const routes = {
     label: 'Shopping',
     path: '/shopping',
     icon: 'ShoppingCart',
-    component: Shopping,
+    component: ShoppingPage,
     isCustomList: true
   },
-  archive: {
+archive: {
     id: 'archive',
     label: 'Archive',
     path: '/archive',
     icon: 'Archive',
-    component: Archive
+    component: ArchivePage
   },
   settings: {
     id: 'settings',
     label: 'Settings',
     path: '/settings',
     icon: 'Settings',
-    component: Settings
+    component: SettingsPage
   }
 };
 

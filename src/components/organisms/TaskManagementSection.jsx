@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
-import ApperIcon from './ApperIcon';
-import TaskItem from './TaskItem';
-import TaskForm from './TaskForm';
-import FilterBar from './FilterBar';
-import EmptyState from './EmptyState';
-import SkeletonLoader from './SkeletonLoader';
-import ErrorState from './ErrorState';
-import { taskService } from '../services';
+import { taskService } from '@/services';
+import HeaderSection from '@/components/molecules/HeaderSection';
+import ProgressBar from '@/components/molecules/ProgressBar';
+import FilterSection from '@/components/organisms/FilterSection';
+import TaskFormModal from '@/components/organisms/TaskFormModal';
+import TaskList from '@/components/organisms/TaskList';
+import EmptyState from '@/components/molecules/EmptyState';
+import SkeletonLoader from '@/components/molecules/SkeletonLoader';
+import ErrorState from '@/components/molecules/ErrorState';
 
-const MainFeature = ({ 
+const TaskManagementSection = ({ 
   listType = 'all', 
   filterByList = null, 
   filterByDate = null,
@@ -30,7 +31,7 @@ const MainFeature = ({
 
   useEffect(() => {
     loadTasks();
-  }, []);
+  }, [listType, filterByList, filterByDate]); // Reload tasks when list type changes
 
   const loadTasks = async () => {
     setLoading(true);
@@ -190,59 +191,27 @@ const MainFeature = ({
 
   return (
     <div className="max-w-full space-y-6">
-      {/* Header with stats */}
-      <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-            <p className="text-gray-500 mt-1">
-              {filteredTasks.length} tasks total • {completedCount} completed
-            </p>
-          </div>
-          
-          {showAddButton && (
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setShowForm(true)}
-              className="flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-light transition-colors duration-200"
-            >
-              <ApperIcon name="Plus" className="w-4 h-4" />
-              <span>Add Task</span>
-            </motion.button>
-          )}
-        </div>
+      <HeaderSection
+        title={title}
+        description={`${filteredTasks.length} tasks total • ${completedCount} completed`}
+        actionLabel={showAddButton ? "Add Task" : null}
+        onAction={showAddButton ? () => setShowForm(true) : null}
+        actionIcon="Plus"
+      />
 
-        {/* Progress bar */}
-        {filteredTasks.length > 0 && (
-          <div className="mt-4">
-            <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-              <span>Progress</span>
-              <span>{Math.round((completedCount / filteredTasks.length) * 100)}%</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <motion.div
-                className="bg-primary h-2 rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: `${(completedCount / filteredTasks.length) * 100}%` }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Filter Bar */}
-      <FilterBar 
+      {filteredTasks.length > 0 && (
+        <ProgressBar current={completedCount} total={filteredTasks.length} />
+      )}
+      
+      <FilterSection 
         filters={filters}
         onFiltersChange={setFilters}
         taskCount={filteredTasks.length}
       />
 
-      {/* Task Form Modal */}
       <AnimatePresence>
         {(showForm || editingTask) && (
-          <TaskForm
+          <TaskFormModal
             task={editingTask}
             onSubmit={editingTask ? 
               (data) => handleUpdateTask(editingTask.id, data) : 
@@ -257,7 +226,6 @@ const MainFeature = ({
         )}
       </AnimatePresence>
 
-      {/* Tasks List */}
       <div className="space-y-4">
         {filteredTasks.length === 0 ? (
           <EmptyState
@@ -271,32 +239,17 @@ const MainFeature = ({
             icon="CheckSquare"
           />
         ) : (
-          <motion.div layout className="space-y-3">
-            <AnimatePresence>
-              {filteredTasks.map((task, index) => (
-                <motion.div
-                  key={task.id}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, x: 10 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <TaskItem
-                    task={task}
-                    onToggleComplete={handleToggleComplete}
-                    onEdit={setEditingTask}
-                    onDelete={handleDeleteTask}
-                    onArchive={handleArchiveTask}
-                  />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+          <TaskList
+            tasks={filteredTasks}
+            onToggleComplete={handleToggleComplete}
+            onEdit={setEditingTask}
+            onDelete={handleDeleteTask}
+            onArchive={handleArchiveTask}
+          />
         )}
       </div>
     </div>
   );
 };
 
-export default MainFeature;
+export default TaskManagementSection;
