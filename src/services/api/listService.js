@@ -1,57 +1,215 @@
-import listsData from '../mockData/lists.json';
-
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+import { toast } from 'react-toastify';
 
 class ListService {
   constructor() {
-    this.lists = [...listsData];
+    const { ApperClient } = window.ApperSDK;
+    this.apperClient = new ApperClient({
+      apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+      apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+    });
+    this.tableName = 'list';
+    
+    // All fields for fetch operations
+    this.allFields = [
+      'Name', 'Tags', 'Owner', 'CreatedOn', 'CreatedBy', 'ModifiedOn', 'ModifiedBy', 'sort_order'
+    ];
+    
+    // Only updateable fields for create/update operations
+    this.updateableFields = [
+      'Name', 'Tags', 'Owner', 'sort_order'
+    ];
   }
 
   async getAll() {
-    await delay(200);
-    return [...this.lists];
+    try {
+      const params = {
+        fields: this.allFields,
+        orderBy: [
+          {
+            fieldName: "sort_order",
+            SortType: "ASC"
+          }
+        ]
+      };
+      
+      const response = await this.apperClient.fetchRecords(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return [];
+      }
+      
+      return response.data || [];
+    } catch (error) {
+      console.error("Error fetching lists:", error);
+      toast.error("Failed to load lists");
+      return [];
+    }
   }
 
   async getById(id) {
-    await delay(150);
-    const list = this.lists.find(l => l.id === id);
-    if (!list) {
-      throw new Error('List not found');
+    try {
+      const params = {
+        fields: this.allFields
+      };
+      
+      const response = await this.apperClient.getRecordById(this.tableName, id, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return null;
+      }
+      
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching list with ID ${id}:`, error);
+      toast.error("Failed to load list");
+      return null;
     }
-    return { ...list };
   }
 
   async create(listData) {
-    await delay(300);
-    const newList = {
-      id: Date.now().toString(),
-      ...listData,
-      sortOrder: this.lists.length
-    };
-    this.lists.push(newList);
-    return { ...newList };
+    try {
+      // Filter to only include updateable fields
+      const filteredData = {};
+      this.updateableFields.forEach(field => {
+        if (listData.hasOwnProperty(field)) {
+          filteredData[field] = listData[field];
+        }
+      });
+      
+      const params = {
+        records: [filteredData]
+      };
+      
+      const response = await this.apperClient.createRecord(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return null;
+      }
+      
+      if (response.results) {
+        const successfulRecords = response.results.filter(result => result.success);
+        const failedRecords = response.results.filter(result => !result.success);
+        
+        if (failedRecords.length > 0) {
+          console.error(`Failed to create ${failedRecords.length} records:${failedRecords}`);
+          
+          failedRecords.forEach(record => {
+            record.errors?.forEach(error => {
+              toast.error(`${error.fieldLabel}: ${error.message}`);
+            });
+            if (record.message) toast.error(record.message);
+          });
+        }
+        
+        if (successfulRecords.length > 0) {
+          toast.success('List created successfully!');
+          return successfulRecords[0].data;
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error("Error creating list:", error);
+      toast.error("Failed to create list");
+      return null;
+    }
   }
 
   async update(id, listData) {
-    await delay(250);
-    const index = this.lists.findIndex(l => l.id === id);
-    if (index === -1) {
-      throw new Error('List not found');
+    try {
+      // Filter to only include updateable fields
+      const filteredData = { Id: parseInt(id) };
+      this.updateableFields.forEach(field => {
+        if (listData.hasOwnProperty(field)) {
+          filteredData[field] = listData[field];
+        }
+      });
+      
+      const params = {
+        records: [filteredData]
+      };
+      
+      const response = await this.apperClient.updateRecord(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return null;
+      }
+      
+      if (response.results) {
+        const successfulUpdates = response.results.filter(result => result.success);
+        const failedUpdates = response.results.filter(result => !result.success);
+        
+        if (failedUpdates.length > 0) {
+          console.error(`Failed to update ${failedUpdates.length} records:${failedUpdates}`);
+          
+          failedUpdates.forEach(record => {
+            record.errors?.forEach(error => {
+              toast.error(`${error.fieldLabel}: ${error.message}`);
+            });
+            if (record.message) toast.error(record.message);
+          });
+        }
+        
+        if (successfulUpdates.length > 0) {
+          toast.success('List updated successfully!');
+          return successfulUpdates[0].data;
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error("Error updating list:", error);
+      toast.error("Failed to update list");
+      return null;
     }
-    
-    this.lists[index] = { ...this.lists[index], ...listData };
-    return { ...this.lists[index] };
   }
 
   async delete(id) {
-    await delay(200);
-    const index = this.lists.findIndex(l => l.id === id);
-    if (index === -1) {
-      throw new Error('List not found');
+    try {
+      const params = {
+        RecordIds: [parseInt(id)]
+      };
+      
+      const response = await this.apperClient.deleteRecord(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return false;
+      }
+      
+      if (response.results) {
+        const successfulDeletions = response.results.filter(result => result.success);
+        const failedDeletions = response.results.filter(result => !result.success);
+        
+        if (failedDeletions.length > 0) {
+          console.error(`Failed to delete ${failedDeletions.length} records:${failedDeletions}`);
+          
+          failedDeletions.forEach(record => {
+            if (record.message) toast.error(record.message);
+          });
+        }
+        
+        if (successfulDeletions.length > 0) {
+          toast.success('List deleted successfully!');
+          return true;
+        }
+      }
+      
+      return false;
+    } catch (error) {
+      console.error("Error deleting list:", error);
+      toast.error("Failed to delete list");
+      return false;
     }
-    
-    this.lists.splice(index, 1);
-    return true;
   }
 }
 
