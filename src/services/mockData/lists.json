@@ -1,0 +1,23 @@
+[
+  {
+    "id": "personal",
+    "name": "Personal",
+    "color": "#3B82F6",
+    "icon": "User",
+    "sortOrder": 0
+  },
+  {
+    "id": "work",
+    "name": "Work",
+    "color": "#8B5CF6",
+    "icon": "Briefcase",
+    "sortOrder": 1
+  },
+  {
+    "id": "shopping",
+    "name": "Shopping",
+    "color": "#F59E0B",
+    "icon": "ShoppingCart",
+    "sortOrder": 2
+  }
+]

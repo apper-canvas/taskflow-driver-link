@@ -1,0 +1,90 @@
+[
+  {
+    "id": "1",
+    "title": "Review quarterly reports and prepare executive summary",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2024-01-15T09:00:00.000Z",
+    "listId": "work",
+    "createdAt": "2024-01-10T08:30:00.000Z",
+    "completedAt": null,
+    "archived": false
+  },
+  {
+    "id": "2",
+    "title": "Schedule dentist appointment for annual checkup",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2024-01-20T14:00:00.000Z",
+    "listId": "personal",
+    "createdAt": "2024-01-09T12:15:00.000Z",
+    "completedAt": null,
+    "archived": false
+  },
+  {
+    "id": "3",
+    "title": "Buy organic vegetables and fruits for the week",
+    "completed": true,
+    "priority": "low",
+    "dueDate": "2024-01-12T10:00:00.000Z",
+    "listId": "shopping",
+    "createdAt": "2024-01-08T19:45:00.000Z",
+    "completedAt": "2024-01-12T11:30:00.000Z",
+    "archived": false
+  },
+  {
+    "id": "4",
+    "title": "Finish project proposal for new client presentation",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2024-01-14T17:00:00.000Z",
+    "listId": "work",
+    "createdAt": "2024-01-07T16:20:00.000Z",
+    "completedAt": null,
+    "archived": false
+  },
+  {
+    "id": "5",
+    "title": "Call mom to discuss weekend family dinner plans",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": null,
+    "listId": "personal",
+    "createdAt": "2024-01-11T20:10:00.000Z",
+    "completedAt": null,
+    "archived": false
+  },
+  {
+    "id": "6",
+    "title": "Research and purchase new running shoes",
+    "completed": false,
+    "priority": "low",
+    "dueDate": "2024-01-25T12:00:00.000Z",
+    "listId": "shopping",
+    "createdAt": "2024-01-06T14:30:00.000Z",
+    "completedAt": null,
+    "archived": false
+  },
+  {
+    "id": "7",
+    "title": "Update LinkedIn profile with recent achievements",
+    "completed": true,
+    "priority": "medium",
+    "dueDate": "2024-01-10T18:00:00.000Z",
+    "listId": "work",
+    "createdAt": "2024-01-05T09:15:00.000Z",
+    "completedAt": "2024-01-10T16:45:00.000Z",
+    "archived": false
+  },
+  {
+    "id": "8",
+    "title": "Book flight tickets for spring vacation",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2024-01-18T23:59:00.000Z",
+    "listId": "personal",
+    "createdAt": "2024-01-04T22:00:00.000Z",
+    "completedAt": null,
+    "archived": false
+  }
+]
